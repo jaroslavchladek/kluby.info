@@ -69,6 +69,16 @@
         }
 
         /* Dark Mode */
+        /* Default navbar-toggler-icon in dark mode */
+        body.dark-mode .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+
+        /* Optional: Adjust the toggler button border */
+        body.dark-mode .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
         body.dark-mode {
             background-color: #121212;
             color: #e0e0e0;
@@ -188,10 +198,12 @@
                     <li class="nav-item"><a class="nav-link text-dark" th:href="@{/clubs}">Home</a></li>
                     <li class="nav-item"><a class="nav-link text-dark" th:href="@{/clubs}">Find Clubs</a></li>
                     <li class="nav-item"><a class="nav-link text-dark" th:href="@{/events}">Find Events</a></li>
-                    <li class="nav-item"><a class="nav-link text-dark" th:href="@{/clubs/new}">Add a Club</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" sec:authorize="isAuthenticated()" th:href="@{/clubs/new}">Add a Club</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" sec:authorize="isAuthenticated()" th:href="@{/recommendations}">Recommendations</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" sec:authorize="isAuthenticated()" th:href="@{/favorites}">Favorites</a></li>
                     <li class="nav-item"><a class="nav-link text-dark" th:href="@{/clubs#pricing-header}">Pricing</a></li>
                 </ul>
-                <form th:action="@{/clubs/search}" class="d-flex">
+                <form th:action="@{/clubs/search}" class="d-flex mb-lg-0 mb-2">
                     <input name="query" class="form-control me-2" type="search" placeholder="Search clubs" aria-label="Search">
                 </form>
                 <div class="d-flex align-items-center">

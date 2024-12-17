@@ -6,8 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Getter
 @Setter
@@ -28,6 +27,20 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
     )
     private List<Role> roles = new ArrayList<>();
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_club_likes",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}
+    )
     private List<ClubLike> clubLikes = new ArrayList<>();
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_event_likes",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}
+    )
     private List<EventLike> eventLikes = new ArrayList<>();
+    @Transient
+    private List<Club> recommendedClubs = new ArrayList<>();
+    @Transient
+    private List<Event> recommendedEvents = new ArrayList<>();
 }

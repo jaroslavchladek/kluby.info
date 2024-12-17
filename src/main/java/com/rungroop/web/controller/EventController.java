@@ -136,6 +136,8 @@ public class EventController {
         model.addAttribute("club", eventDto.getClub());
         model.addAttribute("creationUser", eventDto.getClub().getCreatedBy());
         model.addAttribute("event", eventDto);
+        // For likes
+        model.addAttribute("userService", userService);
         return "events-detail";
     }
 

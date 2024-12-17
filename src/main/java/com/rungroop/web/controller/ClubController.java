@@ -1,6 +1,10 @@
 package com.rungroop.web.controller;
 
+import com.rungroop.web.model.Event;
+import com.rungroop.web.service.EventService;
+import com.rungroop.web.service.SlopeOneClubService;
 import com.rungroop.web.dto.ClubDto;
+import com.rungroop.web.mapper.ClubMapper;
 import com.rungroop.web.model.Club;
 import com.rungroop.web.model.Role;
 import com.rungroop.web.model.User;
@@ -14,27 +18,35 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
 public class ClubController {
 
     private ClubService clubService;
+    private EventService eventService;
     private UserService userService;
+    // Algorithm
+    // TODO change recommendation matrices when User or Club added
+    private SlopeOneClubService slopeOneClubService;
 
     @Autowired
-    public ClubController(ClubService clubService, UserService userService) {
+    public ClubController(ClubService clubService, UserService userService,
+                          SlopeOneClubService slopeOneClubService, EventService eventService) {
         this.clubService = clubService;
         this.userService = userService;
+        this.slopeOneClubService = slopeOneClubService;
+        this.eventService = eventService;
     }
 
-    public User getCurrentUser() {
+    private User getCurrentUser() {
         return userService.findByEmail(
                 SecurityUtil.getSessionUser()
         );
     }
 
-    public boolean userIsTheCreationUserOrAnAdmin(ClubDto clubDto) {
+    private boolean userIsTheCreationUserOrAnAdmin(ClubDto clubDto) {
         // Check whether User is authorized to save the Club.
         User currentUser = getCurrentUser();
         if (currentUser == null)
@@ -50,13 +62,25 @@ public class ClubController {
                 || isAdmin);
     }
 
+    private boolean userLikesTheClub(User user, Long clubId) {
+        return user.getClubLikes()
+                .stream()
+                .anyMatch(like -> like.getClub().getId().equals(clubId) && like.getScore().equals(1L));
+    }
+
+    private boolean userDislikesTheClub(User user, Long clubId) {
+        return user.getClubLikes()
+                .stream()
+                .anyMatch(like -> like.getClub().getId().equals(clubId) && like.getScore().equals(-1L));
+    }
+
     @GetMapping("/")
     public String getHome(Model model){
         return "redirect:/clubs";
     }
 
     @GetMapping("/clubs")
-    public String listClubs(Model model) {
+    public String listClubs(Model model) throws IOException {
         User user = new User();
         List<ClubDto> clubs = clubService.findAllClubs();
 
@@ -67,6 +91,13 @@ public class ClubController {
         }
 
         model.addAttribute("clubs", clubs);
+        // Ensure Club recommendations exist
+        if (user.getRecommendedClubs().isEmpty()) {
+            slopeOneClubService.slopeOne();
+        }
+        model.addAttribute("recommendedClubs",
+                user.getRecommendedClubs().subList(0,
+                        Math.min(user.getRecommendedClubs().size(), 4)));
         return "clubs-list";
     }
 
@@ -120,6 +151,13 @@ public class ClubController {
         model.addAttribute("user", user);
         model.addAttribute("creationUser", clubDto.getCreatedBy());
         model.addAttribute("club", clubDto);
+        // For likes
+        model.addAttribute("userService", userService);
+
+        if (userLikesTheClub(user, clubId))
+            model.addAttribute("likes", 1);
+        if (userDislikesTheClub(user, clubId))
+            model.addAttribute("dislikes", 1);
         return "clubs-detail";
     }
 
@@ -130,6 +168,48 @@ public class ClubController {
 
         clubService.delete(clubId);
         return "redirect:/clubs";
+    }
+
+    @GetMapping("/clubs/add-club-like/{clubId}/")
+    public String addClubLikeNoUser(@PathVariable Long clubId) {
+        return "redirect:/clubs/{clubId}?unauthorized";
+    }
+
+    @GetMapping("/clubs/add-club-dislike/{clubId}/")
+    public String addClubDislikeNoUser(@PathVariable Long clubId) {
+        return "redirect:/clubs/{clubId}?unauthorized";
+    }
+
+    @GetMapping("/clubs/add-club-like/{clubId}/{username}")
+    public String addClubLike(@PathVariable Long clubId,
+                              @PathVariable String username) throws IOException {
+        // Security
+        String currentUsername = getCurrentUser().getUsername();
+        if (!currentUsername.equals(username))
+            return "redirect:/clubs/{clubId}?unauthorized";
+
+        User thisUser = userService.findByUsername(username);
+        userService.addClubLike(ClubMapper.mapToClub(clubService.findClubById(clubId)),
+                thisUser, UserService.LIKE_VALUE);
+        // Recompute Club recommendations
+        slopeOneClubService.slopeOne();
+        return "redirect:/clubs/{clubId}?liked";
+    }
+
+    @GetMapping("/clubs/add-club-dislike/{clubId}/{username}")
+    public String addClubDislike(@PathVariable Long clubId,
+                                 @PathVariable String username) throws IOException {
+        // Security
+        String currentUsername = getCurrentUser().getUsername();
+        if (!currentUsername.equals(username))
+            return "redirect:/clubs/{clubId}?unauthorized";
+
+        User thisUser = userService.findByUsername(username);
+        userService.addClubLike(ClubMapper.mapToClub(clubService.findClubById(clubId)),
+                thisUser, UserService.DISLIKE_VALUE);
+        // Recompute Club recommendations
+        slopeOneClubService.slopeOne();
+        return "redirect:/clubs/{clubId}?disliked";
     }
 
     @GetMapping("/clubs/search")
