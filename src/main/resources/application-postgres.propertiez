@@ -1,0 +1,24 @@
+# PostgreSQL Datasource Configuration
+spring.datasource.url=jdbc:postgresql://localhost:5433/kurabu
+spring.datasource.username=postgres
+spring.datasource.password=postgres
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# JPA and Hibernate Configuration
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.properties.hibernate.show_sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# Logging Levels
+#logging.level.org.hibernate=TRACE
+#logging.level.org.springframework.orm.jpa=DEBUG
+
+# Datasource Initialization (if needed)
+spring.datasource.initialize=true
+# Automatically run data.sql
+spring.datasource.initialization-mode=always
+spring.datasource.data=classpath:data.sql
+
+# Handling large objects (Lob)
+spring.jpa.properties.hibernate.connection.autocommit=false
