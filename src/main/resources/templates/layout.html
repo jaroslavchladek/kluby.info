@@ -12,7 +12,7 @@
     <link th:href="@{/css/styles.css}" rel="stylesheet">
     <meta name="keywords" content="japan, nippon, clubs, kurabu, tokyo, osaka, nagoya">
     <meta name="copyright" content="© Galois Fields (galoisfieldsgf@gmail.com), All rights reserved.">
-    <meta name="description" content="kurabu.info | Your gateway to Japanese clubs.">
+    <meta name="description" content="kluby.info | Your gateway to Czech clubs.">
     <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">kurabu.info</title>
 </head>
 
@@ -189,7 +189,7 @@
 <header class="bg-white border-bottom shadow-sm">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand logo" th:href="@{/clubs}">kurabu.info</a>
+            <a class="navbar-brand logo" th:href="@{/clubs}">kluby.info</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -199,8 +199,8 @@
                     <li class="nav-item"><a class="nav-link text-dark" th:href="@{/clubs}">Find Clubs</a></li>
                     <li class="nav-item"><a class="nav-link text-dark" th:href="@{/events}">Find Events</a></li>
                     <li class="nav-item"><a class="nav-link text-dark" sec:authorize="isAuthenticated()" th:href="@{/clubs/new}">Add a Club</a></li>
-                    <li class="nav-item"><a class="nav-link text-dark" sec:authorize="isAuthenticated()" th:href="@{/recommendations}">Recommendations</a></li>
-                    <li class="nav-item"><a class="nav-link text-dark" sec:authorize="isAuthenticated()" th:href="@{/favorites}">Favorites</a></li>
+<!--                    <li class="nav-item"><a class="nav-link text-dark" sec:authorize="isAuthenticated()" th:href="@{/recommendations}">Recommendations</a></li>-->
+<!--                    <li class="nav-item"><a class="nav-link text-dark" sec:authorize="isAuthenticated()" th:href="@{/favorites}">Favorites</a></li>-->
                     <li class="nav-item"><a class="nav-link text-dark" th:href="@{/clubs#pricing-header}">Pricing</a></li>
                 </ul>
                 <form th:action="@{/clubs/search}" class="d-flex mb-lg-0 mb-2">

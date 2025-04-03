@@ -27,39 +27,39 @@
     </div>
 
 
-    <div sec:authorize="isAuthenticated()">
-    <!-- Recommended Clubs Section -->
-    <div class="container my-5">
-      <h2 class="text-center mb-4">Recommended Clubs</h2>
-      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">
-        <!-- Club Card -->
-        <div th:each="rClub : ${recommendedClubs}" class="col">
-          <div class="card h-100 shadow-sm" style="max-width: 16rem; margin: auto;">
-            <!-- Image with fixed dimensions -->
-            <img th:src="${rClub.photoUrl}"
-                 src="https://via.placeholder.com/150"
-                 class="card-img-top"
-                 alt="Club Image"
-                 style="height: 120px; object-fit: cover;">
+<!--    <div sec:authorize="isAuthenticated()">-->
+<!--    &lt;!&ndash; Recommended Clubs Section &ndash;&gt;-->
+<!--    <div class="container my-5">-->
+<!--      <h2 class="text-center mb-4">Recommended Clubs</h2>-->
+<!--      <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3">-->
+<!--        &lt;!&ndash; Club Card &ndash;&gt;-->
+<!--        <div th:each="rClub : ${recommendedClubs}" class="col">-->
+<!--          <div class="card h-100 shadow-sm" style="max-width: 16rem; margin: auto;">-->
+<!--            &lt;!&ndash; Image with fixed dimensions &ndash;&gt;-->
+<!--            <img th:src="${rClub.photoUrl}"-->
+<!--                 src="https://via.placeholder.com/150"-->
+<!--                 class="card-img-top"-->
+<!--                 alt="Club Image"-->
+<!--                 style="height: 120px; object-fit: cover;">-->
 
-            <!-- Card Body -->
-            <div class="card-body p-2">
-              <h6 th:text="${rClub.title}" class="card-title mb-2 text-truncate" style="font-size: 1rem;">Club Name</h6>
-              <p th:text="${#strings.length(rClub.content) > 100
-                          ? #strings.substring(rClub.content, 0, 100) + '...'
-                          : rClub.content}"
-                 class="card-text mb-2"
-                 style="font-size: 0.85rem; line-height: 1.2;">
-                A short description about the club goes here.
-              </p>
-              <a th:href="@{/clubs/{clubId}(clubId=${rClub.id})}"
-                 class="btn btn-sm btn-primary">Explore</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
+<!--            &lt;!&ndash; Card Body &ndash;&gt;-->
+<!--            <div class="card-body p-2">-->
+<!--              <h6 th:text="${rClub.title}" class="card-title mb-2 text-truncate" style="font-size: 1rem;">Club Name</h6>-->
+<!--              <p th:text="${#strings.length(rClub.content) > 100-->
+<!--                          ? #strings.substring(rClub.content, 0, 100) + '...'-->
+<!--                          : rClub.content}"-->
+<!--                 class="card-text mb-2"-->
+<!--                 style="font-size: 0.85rem; line-height: 1.2;">-->
+<!--                A short description about the club goes here.-->
+<!--              </p>-->
+<!--              <a th:href="@{/clubs/{clubId}(clubId=${rClub.id})}"-->
+<!--                 class="btn btn-sm btn-primary">Explore</a>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    </div>-->
 
 
 
@@ -89,7 +89,7 @@
   <div class="container py-5">
     <div class="text-center mb-4">
       <h2 class="display-6 fw-normal" id="pricing-header">Pricing</h2>
-      <p class="text-muted">Enjoy the full wonder of Japanese clubbing at your fingertips.</p>
+      <p class="text-muted">Enjoy the full wonder of Czech clubbing at your fingertips.</p>
     </div>
 
     <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
